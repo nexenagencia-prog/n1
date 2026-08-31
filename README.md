@@ -1,26 +1,28 @@
-# OCTA Dashboard
+# OCTA — Futuristic Dashboard
 
-Dashboard OCTA reconstruído em componentes reais React/CSS a partir do mockup aprovado.
+Dashboard front-end funcional, responsivo e pronto para GitHub/Vercel.
 
-## Estrutura
-- Next.js 15.5.24
-- React 19
-- TypeScript
-- Lucide React
-- Home estruturada em HTML/CSS/React; o mockup completo não é usado como imagem de fundo.
-- A imagem local `public/images/hero-office.png` é usada somente na área fotográfica da hero.
+## Publicar no GitHub
+1. Crie um repositório vazio.
+2. Envie todos os arquivos desta pasta para a raiz do repositório.
+3. Na Vercel, importe o repositório e publique. Como é um site estático, não exige build.
 
-## Desenvolvimento
-```bash
-npm install
-npm run dev
-```
+## Funcionalidades incluídas
+- Navegação por todas as abas via hash router.
+- Nova reunião com link de sala gerado.
+- Agenda com criação de reuniões.
+- Contatos com cadastro e convite simulado.
+- Gravações e reprodução simulada.
+- OCTA AI com análise demonstrativa.
+- OCTA Skills.
+- Calculadora funcional.
+- Filtros.
+- Notas persistentes em `localStorage`.
+- Compartilhamento de tela simulado.
+- Gravação com estado local.
+- Perfil editável com nome e foto persistentes.
+- Busca global e atalho Cmd/Ctrl + K.
+- Layout responsivo desktop/tablet/mobile.
 
-## Produção
-```bash
-npm run build
-npm start
-```
-
-## Rotas
-`/`, `/reunioes`, `/agenda`, `/contatos`, `/gravacoes`, `/octa-ai`, `/skills`, `/notificacoes`, `/configuracoes`.
+## Observação
+Integrações reais de videoconferência, gravação, IA, e-mail, WhatsApp e compartilhamento de tela exigem backend/APIs e permissões do navegador. A interface e os fluxos estão prontos para conectar essas integrações.
