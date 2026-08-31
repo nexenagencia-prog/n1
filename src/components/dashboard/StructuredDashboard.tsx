@@ -2,24 +2,15 @@
 
 import Link from 'next/link';
 import {
-  Bell, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, CirclePlay, Home, MoreHorizontal,
-  Plus, Search, Settings2, Sparkles, Users, Video, UserPlus, Mic2, BarChart3,
-  Lightbulb, ShieldCheck, Play, X
+  Bell, CalendarDays, ChevronDown, ChevronRight, CirclePlay, MoreHorizontal,
+  Plus, Search, Sparkles, Users, Video, UserPlus, Mic2, BarChart3,
+  Lightbulb, Play, X
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './StructuredDashboard.module.css';
-
-const navItems = [
-  { href:'/', label:'Início', icon:Home, active:true },
-  { href:'/reunioes', label:'Reuniões', icon:Video },
-  { href:'/agenda', label:'Agenda', icon:CalendarDays },
-  { href:'/contatos', label:'Contatos', icon:Users },
-  { href:'/gravacoes', label:'Gravações', icon:CirclePlay },
-  { href:'/octa-ai', label:'OCTA AI', icon:Sparkles, badge:'Novo' },
-  { href:'/skills', label:'OCTA Skills', icon:ShieldCheck },
-  { href:'/notificacoes', label:'Notificações', icon:Bell },
-  { href:'/configuracoes', label:'Configurações', icon:Settings2 },
-];
+import { Sidebar } from '../app/Sidebar';
+import { ProfileEditor } from '../app/ProfileEditor';
+import { useEditableProfile } from '../app/useEditableProfile';
 
 const avatars = ['/images/avatar-1.png','/images/avatar-2.png','/images/avatar-3.png','/images/avatar-4.png'];
 
@@ -54,7 +45,9 @@ const recordings = [
 
 export function StructuredDashboard(){
   const [profileOpen,setProfileOpen]=useState(false);
+  const [profileEditorOpen,setProfileEditorOpen]=useState(false);
   const [sidebarCollapsed,setSidebarCollapsed]=useState(false);
+  const {profile,saveProfile}=useEditableProfile();
   const [noticeOpen,setNoticeOpen]=useState(false);
   const [modal,setModal]=useState<string|null>(null);
   const [activeDay,setActiveDay]=useState('Qua 20');
@@ -73,14 +66,7 @@ export function StructuredDashboard(){
   const days=useMemo(()=>['Seg 18','Ter 19','Qua 20','Qui 21','Sex 22','Sáb 23','Dom 24'],[]);
 
   return <div className={`${styles.app} ${sidebarCollapsed?styles.appCollapsed:styles.appExpanded}`}>
-    <aside className={`${styles.sidebar} ${sidebarCollapsed?styles.sidebarCollapsed:''}`}>
-      <button className={styles.sidebarToggle} aria-label={sidebarCollapsed?'Expandir menu':'Recolher menu'} onClick={()=>setSidebarCollapsed(v=>!v)}>{sidebarCollapsed?<ChevronRight size={17}/>:<ChevronLeft size={17}/>}</button>
-      <div className={styles.brandMark}><span className={styles.brandOrb}/><span className={styles.brandOrbSmall}/></div>
-      <div className={styles.brand}>OCTA</div>
-      <button className={styles.sideSearch} onClick={()=>searchRef.current?.focus()} title="Pesquisar"><Search size={18}/><span className={styles.sideSearchLabel}>Pesquisar</span><kbd>⌘ K</kbd></button>
-      <nav className={styles.nav}>{navItems.map(({href,label,icon:Icon,active,badge})=><Link key={label} href={href} className={`${styles.navItem} ${active?styles.activeNav:''}`}><span className={styles.navIcon}><Icon size={18}/></span><span className={styles.navLabel}>{label}</span>{badge&&<em>{badge}</em>}</Link>)}</nav>
-      <div className={styles.sidebarProfile}><div className={styles.profilePhotoWrap}><img src="/images/avatar-profile.png" alt="Denner Biersack"/><span/></div><strong>Denner Biersack</strong><small>Marketing Digital</small><button><ChevronDown size={17}/></button></div>
-    </aside>
+    <Sidebar collapsed={sidebarCollapsed} onToggle={()=>setSidebarCollapsed(v=>!v)} profile={profile} onEdit={()=>setProfileEditorOpen(true)}/>
 
     <main className={styles.main}>
       <section className={styles.hero}>
@@ -89,13 +75,13 @@ export function StructuredDashboard(){
         <div className={styles.heroTopSearch}><Search size={19}/><input ref={searchRef} placeholder="Buscar reunião, pessoa ou gravação..."/><kbd>⌘ K</kbd></div>
         <div className={styles.topProfileArea}>
           <button className={styles.bellButton} onClick={()=>setNoticeOpen(v=>!v)}><Bell size={19}/><span/></button>
-          <button className={styles.userButton} onClick={()=>setProfileOpen(v=>!v)}><img src="/images/avatar-profile.png" alt="Denner Biersack"/><span>Denner Biersack</span><ChevronDown size={16}/></button>
+          <button className={styles.userButton} onClick={()=>setProfileOpen(v=>!v)}><img src={profile.photo} alt={profile.name}/><span>{profile.name}</span><ChevronDown size={16}/></button>
           {noticeOpen&&<div className={styles.dropdown}><b>Notificações</b><p>Você está em dia. Nenhuma nova notificação importante.</p></div>}
-          {profileOpen&&<div className={`${styles.dropdown} ${styles.profileDrop}`}><b>Denner Biersack</b><p>Marketing Digital</p><Link href="/configuracoes">Configurações</Link></div>}
+          {profileOpen&&<div className={`${styles.dropdown} ${styles.profileDrop}`}><b>{profile.name}</b><p>{profile.role}</p><button className={styles.editProfileLink} onClick={()=>{setProfileOpen(false);setProfileEditorOpen(true)}}>Editar perfil</button><Link href="/configuracoes">Configurações</Link></div>}
         </div>
 
         <div className={styles.heroCopy}>
-          <span>Bem-vindo de volta, <b>Denner</b> 👋</span>
+          <span>Bem-vindo de volta, <b>{profile.name.split(" ")[0]||"Denner"}</b> 👋</span>
           <h1>Suas reuniões.<br/>Seu tempo.<br/>Tudo conectado.</h1>
           <p>A OCTA reúne reuniões, agenda, contatos e<br/>gravações em uma única experiência —<br/>para você ir além em cada conversa.</p>
           <div className={styles.heroActions}>
@@ -122,7 +108,7 @@ export function StructuredDashboard(){
 
         <Link href="/octa-ai" className={styles.aiCard}><div><div className={styles.aiTitle}>OCTA AI <span>Beta</span></div><p>Sua IA de reuniões. Mais<br/>foco, mais resultados.</p><span className={styles.aiButton}>Abrir OCTA AI <ChevronRight size={15}/></span></div><div className={styles.aiOrb}><span/></div></Link>
 
-        <Link href="/skills" className={styles.skillsCard}><div><h2>OCTA Skills</h2><p>Sua evolução em<br/>cada conversa.</p><span className={styles.softButton}>Ver análise <ChevronRight size={15}/></span></div><div className={styles.scoreRing}><div><strong>82</strong><small>/100</small></div></div></Link>
+        <Link href="/octa-skills" className={styles.skillsCard}><div><h2>OCTA Skills</h2><p>Sua evolução em<br/>cada conversa.</p><span className={styles.softButton}>Ver análise <ChevronRight size={15}/></span></div><div className={styles.scoreRing}><div><strong>82</strong><small>/100</small></div></div></Link>
 
         <section className={`${styles.panelCard} ${styles.recentPanel}`}>
           <div className={styles.panelHead}><h2>Reuniões recentes</h2><Link href="/reunioes">Ver todas <ChevronRight size={14}/></Link></div>
@@ -151,6 +137,8 @@ export function StructuredDashboard(){
         </section>
       </section>
     </main>
+
+    {profileEditorOpen&&<ProfileEditor profile={profile} onSave={saveProfile} onClose={()=>setProfileEditorOpen(false)}/>}
 
     {modal&&<div className={styles.modalBackdrop} onClick={()=>setModal(null)}><div className={styles.modal} onClick={e=>e.stopPropagation()}><button onClick={()=>setModal(null)}><X size={17}/></button><Sparkles size={24}/><h3>OCTA</h3><p>{modal}</p></div></div>}
   </div>
