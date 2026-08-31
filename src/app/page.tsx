@@ -1,3 +1,2 @@
-import { MobileDashboard } from '@/components/dashboard/MobileDashboard';
-import { ReferenceDashboard } from '@/components/dashboard/ReferenceDashboard';
-export default function Home(){return <><ReferenceDashboard/><MobileDashboard/></>}
+import { StructuredDashboard } from '@/components/dashboard/StructuredDashboard';
+export default function Home(){return <StructuredDashboard/>}
