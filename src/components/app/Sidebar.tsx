@@ -12,18 +12,18 @@ import styles from '../dashboard/StructuredDashboard.module.css';
 
 const items = [
   { href:'/', label:'Início', icon:Home },
-  { href:'/reunioes', label:'Reuniões', icon:Video },
   { href:'/agenda', label:'Agenda', icon:CalendarDays },
+  { href:'/reunioes', label:'Reuniões', icon:Video },
+  { href:'/reuniao-instantanea', label:'Reunião instantânea', icon:CirclePlay },
   { href:'/contatos', label:'Contatos', icon:Users },
   { href:'/gravacoes', label:'Gravações', icon:CirclePlay },
   { href:'/calculadora', label:'Calculadora', icon:Calculator },
-  { href:'/octa-ai', label:'OCTA AI', icon:Sparkles, badge:'Novo' },
-  { href:'/skills', label:'Skills', icon:TrendingUp },
-  { href:'/octa-skills', label:'OCTA Skills', icon:ShieldCheck },
-  { href:'/lousa', label:'Lousa', icon:PanelTop },
   { href:'/anotar', label:'Anotar', icon:NotebookPen },
-  { href:'/anotacoes', label:'Anotações', icon:FileText },
-  { href:'/notificacoes', label:'Notificações', icon:Bell },
+  { href:'/lousa', label:'Lousa', icon:PanelTop },
+  { href:'/reuniao-instantanea', label:'Entrar em reunião', icon:Video },
+  { href:'/anotacoes', label:'Minhas Anotações', icon:FileText },
+  { href:'/octa-ai', label:'OCTA AI', icon:Sparkles, badge:'Novo' },
+  { href:'/skills', label:'OCTA Skills', icon:TrendingUp },
   { href:'/configuracoes', label:'Configurações', icon:Settings2 },
 ] as const;
 
