@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import {
-  Bell, CalendarDays, ChevronDown, ChevronRight, CirclePlay, Home, MoreHorizontal,
+  Bell, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, CirclePlay, Home, MoreHorizontal,
   Plus, Search, Settings2, Sparkles, Users, Video, UserPlus, Mic2, BarChart3,
   Lightbulb, ShieldCheck, Play, X
 } from 'lucide-react';
@@ -54,6 +54,7 @@ const recordings = [
 
 export function StructuredDashboard(){
   const [profileOpen,setProfileOpen]=useState(false);
+  const [sidebarCollapsed,setSidebarCollapsed]=useState(false);
   const [noticeOpen,setNoticeOpen]=useState(false);
   const [modal,setModal]=useState<string|null>(null);
   const [activeDay,setActiveDay]=useState('Qua 20');
@@ -71,13 +72,14 @@ export function StructuredDashboard(){
 
   const days=useMemo(()=>['Seg 18','Ter 19','Qua 20','Qui 21','Sex 22','Sáb 23','Dom 24'],[]);
 
-  return <div className={styles.app}>
-    <aside className={styles.sidebar}>
+  return <div className={`${styles.app} ${sidebarCollapsed?styles.appCollapsed:styles.appExpanded}`}>
+    <aside className={`${styles.sidebar} ${sidebarCollapsed?styles.sidebarCollapsed:''}`}>
+      <button className={styles.sidebarToggle} aria-label={sidebarCollapsed?'Expandir menu':'Recolher menu'} onClick={()=>setSidebarCollapsed(v=>!v)}>{sidebarCollapsed?<ChevronRight size={17}/>:<ChevronLeft size={17}/>}</button>
       <div className={styles.brandMark}><span className={styles.brandOrb}/><span className={styles.brandOrbSmall}/></div>
       <div className={styles.brand}>OCTA</div>
-      <button className={styles.sideSearch} onClick={()=>searchRef.current?.focus()}><Search size={18}/></button>
-      <nav className={styles.nav}>{navItems.map(({href,label,icon:Icon,active,badge})=><Link key={label} href={href} className={`${styles.navItem} ${active?styles.activeNav:''}`}><span className={styles.navIcon}><Icon size={18}/></span><span>{label}</span>{badge&&<em>{badge}</em>}</Link>)}</nav>
-      <div className={styles.sidebarProfile}><div className={styles.profilePhotoWrap}><img src="/images/avatar-1.png" alt="Denner Biersack"/><span/></div><strong>Denner Biersack</strong><small>Marketing Digital</small><button><ChevronDown size={17}/></button></div>
+      <button className={styles.sideSearch} onClick={()=>searchRef.current?.focus()} title="Pesquisar"><Search size={18}/><span className={styles.sideSearchLabel}>Pesquisar</span><kbd>⌘ K</kbd></button>
+      <nav className={styles.nav}>{navItems.map(({href,label,icon:Icon,active,badge})=><Link key={label} href={href} className={`${styles.navItem} ${active?styles.activeNav:''}`}><span className={styles.navIcon}><Icon size={18}/></span><span className={styles.navLabel}>{label}</span>{badge&&<em>{badge}</em>}</Link>)}</nav>
+      <div className={styles.sidebarProfile}><div className={styles.profilePhotoWrap}><img src="/images/avatar-profile.png" alt="Denner Biersack"/><span/></div><strong>Denner Biersack</strong><small>Marketing Digital</small><button><ChevronDown size={17}/></button></div>
     </aside>
 
     <main className={styles.main}>
@@ -87,7 +89,7 @@ export function StructuredDashboard(){
         <div className={styles.heroTopSearch}><Search size={19}/><input ref={searchRef} placeholder="Buscar reunião, pessoa ou gravação..."/><kbd>⌘ K</kbd></div>
         <div className={styles.topProfileArea}>
           <button className={styles.bellButton} onClick={()=>setNoticeOpen(v=>!v)}><Bell size={19}/><span/></button>
-          <button className={styles.userButton} onClick={()=>setProfileOpen(v=>!v)}><img src="/images/avatar-1.png" alt="Denner Biersack"/><span>Denner Biersack</span><ChevronDown size={16}/></button>
+          <button className={styles.userButton} onClick={()=>setProfileOpen(v=>!v)}><img src="/images/avatar-profile.png" alt="Denner Biersack"/><span>Denner Biersack</span><ChevronDown size={16}/></button>
           {noticeOpen&&<div className={styles.dropdown}><b>Notificações</b><p>Você está em dia. Nenhuma nova notificação importante.</p></div>}
           {profileOpen&&<div className={`${styles.dropdown} ${styles.profileDrop}`}><b>Denner Biersack</b><p>Marketing Digital</p><Link href="/configuracoes">Configurações</Link></div>}
         </div>
