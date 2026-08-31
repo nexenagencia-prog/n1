@@ -46,10 +46,10 @@ const recentMeetings = [
 ] as const;
 
 const recordings = [
-  ['Planejamento de Marketing','Hoje','14:30','48 min','48:12',0],
-  ['Reunião com João Silva','Ontem','15:00','32 min','32:46',0],
-  ['Alinhamento Comercial','Ontem','10:30','26 min','26:10',0],
-  ['Briefing Campanha','18 Mai','11:00','52 min','52:33',1],
+  ['Planejamento de Marketing','Hoje','14:30','48 min','48:12','/images/recording-1.png'],
+  ['Reunião com João Silva','Ontem','15:00','32 min','32:46','/images/recording-2.png'],
+  ['Alinhamento Comercial','Ontem','10:30','26 min','26:10','/images/recording-3.png'],
+  ['Briefing Campanha','18 Mai','11:00','52 min','52:33','/images/recording-4.png'],
 ] as const;
 
 export function StructuredDashboard(){
@@ -131,7 +131,7 @@ export function StructuredDashboard(){
 
         <section className={`${styles.panelCard} ${styles.recordingsPanel}`}>
           <div className={styles.panelHead}><h2>Gravações</h2><Link href="/gravacoes">Ver todas <ChevronRight size={14}/></Link></div>
-          <div className={styles.list}>{recordings.map(([title,day,time,duration,stamp,avatarIndex])=><div className={styles.recordingRow} key={title}><div className={styles.thumb}><img src={avatars[avatarIndex]} alt=""/><span>{stamp}</span></div><div className={styles.meetingText}><strong>{title}</strong><small>{day} &nbsp;·&nbsp; {time} &nbsp;·&nbsp; {duration}</small></div><MoreHorizontal size={16}/><button onClick={()=>setModal(`Reproduzindo ${title}`)}><Play size={14} fill="currentColor"/></button></div>)}</div>
+          <div className={styles.list}>{recordings.map(([title,day,time,duration,stamp,thumbnail])=><div className={styles.recordingRow} key={title}><div className={styles.thumb}><img src={thumbnail} alt={`Miniatura de ${title}`}/><span>{stamp}</span></div><div className={styles.meetingText}><strong>{title}</strong><small>{day} &nbsp;·&nbsp; {time} &nbsp;·&nbsp; {duration}</small></div><MoreHorizontal size={16}/><button onClick={()=>setModal(`Reproduzindo ${title}`)}><Play size={14} fill="currentColor"/></button></div>)}</div>
         </section>
 
         <section className={`${styles.panelCard} ${styles.agendaPanel}`}>
