@@ -22,3 +22,9 @@ for n in range(1,5):
 assert "src={avatars[avatarIndex]}" not in tsx.split("recordings.map",1)[1], "recordings must not reuse circular avatars as thumbnails"
 assert ".heroCopy h1{font-size:45px" in css and "font-weight:610" in css, "hero title must use refined UI typography"
 print('dashboard fidelity checks passed')
+
+css = (root/'src/components/dashboard/StructuredDashboard.module.css').read_text()
+assert "octa-ai-background.png" in css, "OCTA AI card must use the supplied futuristic landscape as its background"
+assert ".aiCard:before" in css, "OCTA AI background needs a readability overlay"
+assert ".heroImage:before" in css, "hero photo needs a subtle futuristic atmospheric treatment without replacing the man photo"
+assert (root/'public/images/octa-ai-background.png').exists(), "OCTA AI background asset must be packaged locally"
